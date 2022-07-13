@@ -17,7 +17,7 @@ class HomePageController extends GetxController {
     var formatter = DateFormat('yyyy-MM-dd');
     currentDate.value = formatter.format(now);
 
-    getSessionData();
+    getSessionData().then((value) {});
     super.onInit();
   }
 
@@ -32,15 +32,15 @@ class HomePageController extends GetxController {
         .child(currentDate.value)
         .child(time)
         .set(size.toString())
-        .then((value) {
-      getSessionData();
+        .then((value) async {
+      await getSessionData();
     }).onError((error, stackTrace) {
       log(error.toString());
     });
   }
 
-  void getSessionData() {
-    FirebaseDatabase.instance
+  Future<void> getSessionData() async {
+    await FirebaseDatabase.instance
         .ref()
         .child("sessions/" + currentDate.value)
         .get()

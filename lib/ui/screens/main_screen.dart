@@ -25,8 +25,8 @@ class MainScreen extends StatelessWidget {
             : FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Obx(() => controller.tabIndex.value == 0
             ? FloatingActionButton.extended(
-                onPressed: () {
-                  homeController.setSessionData();
+                onPressed: () async {
+                  await homeController.setSessionData();
                 },
                 label: SizedBox(
                   width: 330,
