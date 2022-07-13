@@ -17,14 +17,14 @@ class HomePageController extends GetxController {
     var formatter = DateFormat('yyyy-MM-dd');
     currentDate.value = formatter.format(now);
 
-    getSessionData().then((value) {});
+    getSessionData(() {}).then((value) {});
     super.onInit();
   }
 
-  setSessionData() async {
+  Future<void> setSessionData(Function() onComplete) async {
     String time = DateFormat("hh:mm:ss a").format(DateTime.now());
-    int size = list.length + 1;
-    list.add(SessionModel(time: time, position: size.toString()));
+    int size = maxPosition.value + 1;
+    Future.delayed(const Duration(seconds: 1)).then((value) {});
 
     FirebaseDatabase.instance
         .ref()
@@ -33,32 +33,27 @@ class HomePageController extends GetxController {
         .child(time)
         .set(size.toString())
         .then((value) async {
-      await getSessionData();
+      await getSessionData(onComplete);
     }).onError((error, stackTrace) {
       log(error.toString());
     });
   }
 
-  Future<void> getSessionData() async {
-    await FirebaseDatabase.instance
+  Future<void> getSessionData(Function() onComplete) async {
+    FirebaseDatabase.instance
         .ref()
         .child("sessions/" + currentDate.value)
         .get()
         .then((value) {
-      if (value.exists) {
-        var tempList = [];
-        for (var element in value.children) {
-          tempList.add(SessionModel(
-              time: element.key.toString(),
-              position: element.value.toString()));
-
-          if (int.parse(element.value.toString()) > maxPosition.value) {
-            maxPosition.value = int.parse(element.value.toString());
-          }
-        }
-
-        list.value = tempList;
+      var tempList = [];
+      for (var element in value.children) {
+        tempList.add(SessionModel(
+            time: element.key.toString(), position: element.value.toString()));
       }
+      maxPosition.value = tempList.length;
+
+      list.value = tempList;
+      onComplete();
     });
   }
 }

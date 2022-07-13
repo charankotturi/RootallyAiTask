@@ -5,6 +5,7 @@ import 'package:task/ui/screens/rehab_page.dart';
 import 'package:task/ui/widgets/bottom_nav_widget.dart';
 import 'package:task/view_models/bottom_nav_controller.dart';
 import 'package:task/view_models/home_page_controller.dart';
+import 'package:task/view_models/main_controller.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class MainScreen extends StatelessWidget {
     var tabView = MediaQuery.of(context).size.width > 760;
 
     final homeController = Get.put(HomePageController(), permanent: false);
+    final mainController = Get.put(MainController(), permanent: false);
 
     return SafeArea(
       child: Scaffold(
@@ -25,9 +27,18 @@ class MainScreen extends StatelessWidget {
             : FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Obx(() => controller.tabIndex.value == 0
             ? FloatingActionButton.extended(
-                onPressed: () async {
-                  await homeController.setSessionData();
-                },
+                onPressed: mainController.isEnabled.value
+                    ? () async {
+                        if (homeController.maxPosition.value == 30) {
+                          return;
+                        }
+
+                        mainController.toggleButton(false);
+                        await homeController.setSessionData(() {
+                          mainController.toggleButton(true);
+                        });
+                      }
+                    : null,
                 label: SizedBox(
                   width: 330,
                   child: Center(
