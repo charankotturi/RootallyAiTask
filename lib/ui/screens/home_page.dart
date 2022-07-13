@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task/models/session_model.dart';
@@ -14,47 +12,53 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var tabView = MediaQuery.of(context).size.width > 760;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
-        child: Column(children: [
-          const SizedBox(
-            height: 15,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Flex(
+            direction: tabView ? Axis.horizontal : Axis.vertical,
             children: [
-              Text(
-                "Good Morining,\nJames",
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+              SizedBox(
+                height: 15,
+                width: tabView ? 20 : 0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: tabView
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Good Morining,\nJames",
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Obx(() => ProgressWidget(
+                        maxPosition: controller.maxPosition.value,
+                      )),
+                ],
               ),
               const SizedBox(
                 height: 15,
               ),
-              Obx(() => ProgressWidget(
-                    maxPosition: controller.maxPosition.value,
-                  )),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Expanded(
-              child: ListView.builder(
-            itemCount: sessionsSize,
-            itemBuilder: ((context, index) {
-              return Obx(() => SessionWidget(
-                    maxPosition: controller.list.length,
-                    index: index,
-                    time: (controller.list[index < controller.list.length
-                            ? index
-                            : 0] as SessionModel)
-                        .time,
-                  ));
-            }),
-          ))
-        ]),
+              Expanded(
+                  child: ListView.builder(
+                itemCount: sessionsSize,
+                itemBuilder: ((context, index) {
+                  return Obx(() => SessionWidget(
+                      maxPosition: controller.list.length,
+                      index: index,
+                      time: index >= controller.list.length
+                          ? "time"
+                          : (controller.list[index] as SessionModel).time));
+                }),
+              ))
+            ]),
       ),
     );
   }

@@ -19,25 +19,25 @@ buildBottomNavigationMenu(context, BottomNavController controller) {
           items: [
             BottomNavigationBarItem(
               icon: Container(
-                margin: EdgeInsets.only(bottom: 7),
-                child: Icon(
+                margin: const EdgeInsets.only(bottom: 7),
+                child: const Icon(
                   Icons.home,
                   size: 20.0,
                 ),
               ),
               label: 'Home',
-              backgroundColor: Color.fromRGBO(36, 54, 101, 1.0),
+              backgroundColor: const Color.fromRGBO(36, 54, 101, 1.0),
             ),
             BottomNavigationBarItem(
               icon: Container(
-                margin: EdgeInsets.only(bottom: 7),
-                child: Icon(
-                  Icons.people,
+                margin: const EdgeInsets.only(bottom: 7),
+                child: const Icon(
+                  Icons.sports_gymnastics,
                   size: 20.0,
                 ),
               ),
               label: 'Rehab',
-              backgroundColor: Color.fromRGBO(36, 54, 101, 1.0),
+              backgroundColor: const Color.fromRGBO(36, 54, 101, 1.0),
             ),
           ],
         ),

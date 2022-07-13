@@ -64,12 +64,17 @@ class SessionWidget extends StatelessWidget {
                       child: Container(
                         color: Colors.white,
                         child: Icon(
-                          index <= maxPosition
-                              ? Icons.check_circle
-                              : Icons.circle_outlined,
-                          size: 17,
-                          color:
-                              index <= maxPosition ? Colors.blue : Colors.grey,
+                          index == maxPosition
+                              ? Icons.run_circle
+                              : index < maxPosition
+                                  ? Icons.check_circle
+                                  : Icons.circle_outlined,
+                          size: index == maxPosition ? 25 : 17,
+                          color: index == maxPosition
+                              ? const Color(0XFFf3c30a)
+                              : index < maxPosition
+                                  ? Colors.blue
+                                  : Colors.grey,
                         ),
                       ),
                     ),

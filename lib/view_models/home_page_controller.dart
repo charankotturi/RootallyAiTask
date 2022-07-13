@@ -61,9 +61,4 @@ class HomePageController extends GetxController {
       }
     });
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

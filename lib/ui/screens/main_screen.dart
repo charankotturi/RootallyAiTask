@@ -13,20 +13,23 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final BottomNavController controller =
         Get.put(BottomNavController(), permanent: false);
+    var tabView = MediaQuery.of(context).size.width > 760;
 
     final homeController = Get.put(HomePageController(), permanent: false);
 
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: buildBottomNavigationMenu(context, controller),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: tabView
+            ? FloatingActionButtonLocation.startFloat
+            : FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Obx(() => controller.tabIndex.value == 0
             ? FloatingActionButton.extended(
                 onPressed: () {
                   homeController.setSessionData();
                 },
                 label: SizedBox(
-                  width: MediaQuery.of(context).size.width - 120,
+                  width: 330,
                   child: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +50,9 @@ class MainScreen extends StatelessWidget {
         body: Obx(() => IndexedStack(
               index: controller.tabIndex.value,
               children: [
-                HomePage(controller: homeController),
+                HomePage(
+                  controller: homeController,
+                ),
                 const RehabPage()
               ],
             )),
